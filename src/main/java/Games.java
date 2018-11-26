@@ -29,20 +29,18 @@ public class Games {
 
     private String url = "jdbc:mysql://localhost:3306/games?useSSL=false";
     private String username = "root";
-    private String password = "Damian789!";
-    private Connection connection;
-    private Statement statement;
+    private String password = "#######";
+    Connection connection;
+    Statement statement;
 
-    public Games(String username, String password) throws SQLException, ClassNotFoundException {
+    public Games(String url, String username, String password) throws SQLException, ClassNotFoundException {
         Class.forName("com.mysql.cj.jdbc.Driver");
-//        String url = "jdbc:mysql://localhost:3306/games?useSSL=false";
         this.url = url;
         this.username = username;
         this.password = password;
-//        String username = "root";
-//        String password = "###########";
         Connection connection = DriverManager.getConnection(url, username, password);
         Statement statement = connection.createStatement();
+
         String query = "select * from games_table";
         ResultSet resultSet = statement.executeQuery(query);
         System.out.println("These are all games: ");
@@ -50,8 +48,8 @@ public class Games {
             int id = resultSet.getInt(1);
             String name = resultSet.getString("Name");
             System.out.println(name);
-            connection.close();
         }
+        connection.close();
     }
 
     public void GetRecordsByRanking() throws SQLException {
@@ -74,7 +72,7 @@ public class Games {
 
     public void GetRecordsByCategory() throws SQLException {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter desired game type Adventure/Race/Educational/Social planning");
+        System.out.println("Enter desired game type: Adventure/Race/Educational/Social planning");
         String userInput = scanner.next();
         System.out.println("These are games fullfiling the requirements: ");
         Statement statement = connection.createStatement();
@@ -92,20 +90,14 @@ public class Games {
     }
 
 
+    public void saveToFile(String fileName) throws IOException, SQLException {
+        String title, producent, type;
+        int rating;
 
-    public void saveAll() throws SQLException, IOException {
         String query = "select * from games_table";
-
         ResultSet resultSet = statement.executeQuery(query);
         System.out.println(resultSet);
         ResultSet resultSet1 = statement.executeQuery(query);
-        saveToFile(resultSet, "Records");
-    }
-
-    private void saveToFile(ResultSet resultSet, String fileName) throws IOException, SQLException {
-
-        String title, producent, type;
-        int rating;
 
         FileWriter fileWriter = new FileWriter((fileName + ".csv"));
         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
@@ -119,7 +111,6 @@ public class Games {
             bufferedWriter.write(title + ";" + producent + ";" + type + ";" + rating + ";");
             bufferedWriter.newLine();
         }
-
         bufferedWriter.close();
 
     }
