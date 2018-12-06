@@ -9,7 +9,7 @@ public class Menu {
         return "Hey there, these are your options:\n" +
                 "0 - show all games\n" +
                 "1 - show games rated higher than...\n" +
-                "2 -show games with category of...\n" +
+                "2 - show games with category\n" +
                 " Your choice: ";
     }
 
